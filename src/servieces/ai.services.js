@@ -1,36 +1,33 @@
-require('dotenv').config(); // Load environment variables
 const { GoogleGenAI } = require('@google/genai');
+require("dotenv").config();
 
-async function main() {
-  const ai = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY,
-  });
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY});
+//  console.log(ai)
+async function generateResponce(prompt) {
+  const response = await ai.models.generateContent({
+    model: "gemini-2.5-flash",
+    contents: prompt,
+    config: {
+      systemInstruction: `You are an expert senior software engineer.
 
-  const config = {
-    responseMimeType: 'text/plain',
-  };
+          Please review the following code thoroughly. Your review should include:
 
-  const model = 'gemini-2.0-flash';
-  const contents = [
-    {
-      role: 'user',
-      parts: [
-        {
-          text: `INSERT_INPUT_HERE`,
-        },
-      ],
-    },
-  ];
+          - Identification of any bugs or logical errors.
+          - Suggestions for improving readability and maintainability.
+          - Notes on performance optimizations, if applicable.
+          - Security considerations.
+          - Best practices and conventions relevant to the language.
 
-  const response = await ai.models.generateContentStream({
-    model,
-    config,
-    contents,
-  });
+          Provide your feedback in clear, concise bullet points in Markdown format.
 
-  for await (const chunk of response) {
-    console.log(chunk.text);
-  }
+          If any improvements are needed, include corrected example code snippets in english.`,
+              }
+            });
+ 
+  return response.text
 }
 
-main();
+module.exports = {generateResponce}
+
+
+

@@ -14,14 +14,19 @@ aiRoute.get('/response', async (req, res) => {
      
 }); 
 aiRoute.post('/review', async (req, res) => {
+    try {
+    console.log("==== API HIT ====");
     const code = req.body.code;
     console.log("Request body:", code);
     if (!code) {
         return res.status(400).send("Code is required");
     }
      const response = await generateResponce(code);
-    res.send(response);
-   
+    res.send(response);}
+  catch (error) {
+      console.log(error);
+      res.status(500).json("Internal Server Error !!!");
+   }
     
 }); 
 

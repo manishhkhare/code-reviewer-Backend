@@ -14,8 +14,9 @@ aiRoute.get('/response', async (req, res) => {
      
 }); 
 aiRoute.post('/review', async (req, res) => {
+    
     try {
-    console.log("==== API HIT ====");
+
     const code = req.body.code;
     console.log("Request body:", code);
     if (!code) {
